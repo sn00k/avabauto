@@ -1,44 +1,56 @@
+<script setup lang="ts">
+import GoogleMap from '~/components/GoogleMap.vue';
+import ContactForm from '~/components/ContactForm.vue';
+</script>
+
 <template>
   <div>
-    <Header />
-    <section class="hero">
-      <div class="hero-text">
-        <h1>Welcome to Avabauto</h1>
-        <p class="text-red-400">
-          Opening Hours: Mon-Fri 9am - 6pm, Sat 10am - 4pm
-        </p>
-        <p>Address: 123 Car St, City, Country</p>
-        <p>Financing options available. Contact us for more details.</p>
+    <section
+      class="hero flex justify-center h-screen items-center text-center text-white bg-gradient-to-b from-gray-800 to-white"
+    >
+      <div
+        class="bg-black bg-opacity-50 w-5/6 lg:w-1/2 p-5 rounded-lg flex flex-col gap-y-12"
+      >
+        <div>
+          <h1 class="text-4xl mb-4">Välkommen till AVAB AUTO!</h1>
+          <h2 class="text-xl">Din säkra bilhandlare</h2>
+        </div>
+        <div
+          class="flex lg:flex-row flex-col gap-y-12 lg:w-full lg:justify-between"
+        >
+          <div class="flex flex-col items-center gap-y-2 lg:w-1/4">
+            <span class="material-icons">schedule</span>
+            <span>Öppettider:</span>
+            <span> Vardagar 10-18, Lördagar 10-15, Söndagar stängt. </span>
+            <p>
+              Visning utav bil sker enligt överrenskommelse. Tidsbokning krävs.
+            </p>
+          </div>
+          <div class="flex flex-col items-center gap-y-2 lg:w-1/4">
+            <span class="material-symbols-outlined">map</span>
+            <span>Adress:</span>
+            <span>Lektorsvägen 10C</span>
+            <span>352 40 Växjö</span>
+          </div>
+          <div class="flex flex-col items-center gap-y-2 lg:w-1/4">
+            <span class="material-symbols-outlined">payments</span>
+            <span>Finansiering:</span>
+            <span>Svea Bank</span>
+          </div>
+        </div>
       </div>
     </section>
-    <section>
+    <section class="bg-gray-50 py-12">
       <GoogleMap />
     </section>
-    <section>
+    <section class="bg-gray-100 py-12">
       <ContactForm />
     </section>
-    <Footer />
   </div>
 </template>
 
-<script>
-import Header from '~/components/Header.vue';
-import Footer from '~/components/Footer.vue';
-import GoogleMap from '~/components/GoogleMap.vue';
-import ContactForm from '~/components/ContactForm.vue';
-
-export default {
-  components: {
-    Header,
-    Footer,
-    GoogleMap,
-    ContactForm,
-  },
-};
-</script>
-
 <style scoped>
-section {
-  padding: 40px 20px;
+.hero {
+  background: url('../assets/img/car-bg.jpg') no-repeat center center/cover;
 }
 </style>

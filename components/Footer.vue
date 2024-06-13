@@ -1,36 +1,21 @@
 <template>
-  <footer class="footer">
-    <div class="left">
-      <span>Avabauto</span>
-      <a href="https://facebook.com" target="_blank">Facebook</a>
-      <a href="https://twitter.com" target="_blank">Twitter</a>
+  <footer class="bg-black text-white p-4 flex justify-between items-center">
+    <div class="flex items-center w-1/5">
+      <span class="lg:text-2xl text-base font-bold uppercase"> avab auto </span>
     </div>
-    <div class="right">
-      <p>Address: 123 Car St, City, Country</p>
-      <p>Phone: +123 456 7890</p>
-      <p>Email: contact@avabauto.com</p>
+    <div
+      class="flex gap-x-2 text-end items-center text-xs lg:flex-row lg:gap-x-12 lg:text-base lg:text-start"
+    >
+      <div class="text-start">
+        <p>avinbaker@avabauto.se</p>
+        <p>+4600000000</p>
+      </div>
+      <div>
+        <p>AVAB AUTO AB</p>
+        <p>559072-2665</p>
+        <p>LEKTORSVÄGEN 10C</p>
+        <p>352 40 VÄXJÖ</p>
+      </div>
     </div>
   </footer>
 </template>
-
-<style scoped>
-.left {
-  display: flex;
-  align-items: center;
-}
-
-.left span {
-  margin-right: 20px;
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.left a {
-  margin-right: 10px;
-  color: white;
-}
-
-.right p {
-  margin: 5px 0;
-}
-</style>
