@@ -18,7 +18,7 @@ import ContactForm from '~/components/ContactForm.vue';
         <div
           class="flex lg:flex-row flex-col gap-y-12 lg:w-full lg:justify-between"
         >
-          <div class="flex flex-col items-center gap-y-2 lg:w-1/4">
+          <div class="flex flex-wrap flex-col items-center gap-y-2 lg:w-1/4">
             <span class="material-icons">schedule</span>
             <span>Öppettider:</span>
             <span> Vardagar 10-18, Lördagar 10-15, Söndagar stängt. </span>
@@ -26,13 +26,13 @@ import ContactForm from '~/components/ContactForm.vue';
               Visning utav bil sker enligt överrenskommelse. Tidsbokning krävs.
             </p>
           </div>
-          <div class="flex flex-col items-center gap-y-2 lg:w-1/4">
+          <div class="flex flex-wrap flex-col items-center gap-y-2 lg:w-1/4">
             <span class="material-symbols-outlined">map</span>
             <span>Adress:</span>
             <span>Lektorsvägen 10C</span>
             <span>352 40 Växjö</span>
           </div>
-          <div class="flex flex-col items-center gap-y-2 lg:w-1/4">
+          <div class="flex flex-wrap flex-col items-center gap-y-2 lg:w-1/4">
             <span class="material-symbols-outlined">payments</span>
             <span>Finansiering:</span>
             <span>Svea Bank</span>
