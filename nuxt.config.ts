@@ -14,15 +14,22 @@ export default defineNuxtConfig({
       ],
     },
   },
+  vue: {
+    compilerOptions: {
+      isCustomElement: (tag) => ['ehtml'].includes(tag),
+    },
+  },
   runtimeConfig: {
     public: {
       emailjsServiceId: process.env.EMAILJS_SERVICE_ID,
       emailjsTemplateId: process.env.EMAILJS_TEMPLATE_ID,
       emailjsPublicKey: process.env.EMAILJS_PUBLIC_KEY,
+      mailerSendApiKey: process.env.MAILERSEND_API_KEY,
     },
   },
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
+  modules: ['@vue-email/nuxt'],
   postcss: {
     plugins: {
       tailwindcss: {},

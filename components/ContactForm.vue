@@ -13,28 +13,64 @@ const form = ref({
 const submittedFormMsg = ref('');
 const submittedFormError = ref(false);
 
-const sendEmail = () => {
-  const serviceId = config.public.emailjsServiceId as string;
-  const templateId = config.public.emailjsTemplateId as string;
-  const publicKey = config.public.emailjsPublicKey as string;
-
-  emailjs
-    .send(serviceId, templateId, form.value, publicKey)
-    .then((response) => {
-      console.info('SUCCESS!', response);
-      form.value.name = '';
-      form.value.email = '';
-      form.value.message = '';
-      submittedFormMsg.value = 'Tack för ditt meddelande!';
-      submittedFormError.value = false;
-    })
-    .catch((error) => {
-      console.error('Email sending failed:', error);
-      submittedFormMsg.value =
-        'Något gick fel! Vänligen kontakta Avin Baker direkt på 070-1234567 eller avin@avabauto.se';
-      submittedFormError.value = true;
+async function sendEmail() {
+  // try {
+  //   const { data, error } = await useFetch('/api/hello');
+  //   console.log('data:', data);
+  // } catch (error) {
+  //   console.error('Error sending email:', error);
+  // }
+  try {
+    const { data, error } = await useFetch('/api/send-mail', {
+      method: 'POST',
+      body: JSON.stringify(form.value),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
-};
+
+    console.log('data:', data);
+    console.log('error:', error);
+    if (error.value || data.value?.error) {
+      console.error('Error sending email:', error.value);
+      throw new Error('Failed to send email');
+    }
+
+    submittedFormMsg.value = 'Tack för ditt meddelande!';
+    submittedFormError.value = false;
+    form.value.name = '';
+    form.value.email = '';
+    form.value.message = '';
+  } catch (error) {
+    console.error('Email sending failed:', error);
+    submittedFormMsg.value =
+      'Något gick fel! Vänligen kontakta Avin Baker direkt på 070-1234567 eller avin@avabauto.se';
+    submittedFormError.value = true;
+  }
+}
+
+// const sendEmail = () => {
+//   const serviceId = config.public.emailjsServiceId as string;
+//   const templateId = config.public.emailjsTemplateId as string;
+//   const publicKey = config.public.emailjsPublicKey as string;
+
+//   emailjs
+//     .send(serviceId, templateId, form.value, publicKey)
+//     .then((response) => {
+//       console.info('SUCCESS!', response);
+//       form.value.name = '';
+//       form.value.email = '';
+//       form.value.message = '';
+//       submittedFormMsg.value = 'Tack för ditt meddelande!';
+//       submittedFormError.value = false;
+//     })
+//     .catch((error) => {
+//       console.error('Email sending failed:', error);
+//       submittedFormMsg.value =
+//         'Något gick fel! Vänligen kontakta Avin Baker direkt på 070-1234567 eller avin@avabauto.se';
+//       submittedFormError.value = true;
+//     });
+// };
 </script>
 
 <template>
