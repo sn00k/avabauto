@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@emailjs/browser": "^4.3.3",
+    "@nuxtjs/turnstile": "^0.8.0",
     "mailersend": "^2.2.0",
     "nuxt": "^3.12.1",
     "vue": "^3.4.27",

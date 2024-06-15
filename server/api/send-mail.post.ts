@@ -1,20 +1,21 @@
 import { EmailParams, MailerSend, Recipient, Sender } from 'mailersend';
 import { useCompiler } from '#vue-email';
 
+const config = useRuntimeConfig();
+
 const mailerSend = new MailerSend({
-  apiKey: process.env.MAILERSEND_API_KEY || '',
+  apiKey: config.mailerSendApiKey,
 });
 
 const sentFrom = new Sender(
-  'kontakt@avabauto.se',
-  // 'avab.auto.kontakt@trial-0r83ql3o8zmlzw1j.mlsender.net',
+  // 'kontakt@avabauto.se',
+  'avab.auto.kontakt@trial-0r83ql3o8zmlzw1j.mlsender.net',
   'AVAB Auto kontaktformulär',
 );
 const recipients = [new Recipient('robin@robins.nu', 'Robin Nilsson')];
 
 export default defineEventHandler(async (event) => {
   const { name, email, message } = await readBody(event);
-  const error = false;
 
   const template = await useCompiler('contact.vue', {
     props: {
@@ -32,9 +33,9 @@ export default defineEventHandler(async (event) => {
 
   try {
     await mailerSend.email.send(options);
-  } catch (error: any) {
+    return { message: 'Email sent successfully' };
+  } catch (error) {
     console.error('Error sending email', error);
-    error = true;
+    throw error;
   }
-  return { message: 'Email sent', error };
 });

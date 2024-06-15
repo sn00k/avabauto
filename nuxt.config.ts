@@ -20,16 +20,23 @@ export default defineNuxtConfig({
     },
   },
   runtimeConfig: {
+    mailerSendApiKey: process.env.NUXT_MAILERSEND_API_KEY,
+    turnstile: {
+      secretKey: process.env.NUXT_TURNSTILE_SECRET_KEY,
+    },
     public: {
-      emailjsServiceId: process.env.EMAILJS_SERVICE_ID,
-      emailjsTemplateId: process.env.EMAILJS_TEMPLATE_ID,
-      emailjsPublicKey: process.env.EMAILJS_PUBLIC_KEY,
-      mailerSendApiKey: process.env.MAILERSEND_API_KEY,
+      turnstile: {
+        siteKey: process.env.NUXT_PUBLIC_TURNSTILE_SITE_KEY,
+      },
     },
   },
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
-  modules: ['@vue-email/nuxt'],
+  modules: ['@vue-email/nuxt', '@nuxtjs/turnstile'],
+  turnstile: {
+    siteKey: process.env.TURNSTILE_SITE_KEY,
+    addValidateEndpoint: true,
+  },
   postcss: {
     plugins: {
       tailwindcss: {},

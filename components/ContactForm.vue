@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import emailjs from '@emailjs/browser';
 
 const config = useRuntimeConfig();
+const turnstile = ref();
+const token = ref('');
 
 const form = ref({
   name: '',
@@ -14,63 +15,33 @@ const submittedFormMsg = ref('');
 const submittedFormError = ref(false);
 
 async function sendEmail() {
-  // try {
-  //   const { data, error } = await useFetch('/api/hello');
-  //   console.log('data:', data);
-  // } catch (error) {
-  //   console.error('Error sending email:', error);
-  // }
-  try {
-    const { data, error } = await useFetch('/api/send-mail', {
-      method: 'POST',
-      body: JSON.stringify(form.value),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+  if (!token.value) {
+    submittedFormMsg.value = 'Vänligen verifiera att du inte är en robot!';
+    submittedFormError.value = true;
+    return;
+  }
 
-    console.log('data:', data);
-    console.log('error:', error);
-    if (error.value || data.value?.error) {
-      console.error('Error sending email:', error.value);
-      throw new Error('Failed to send email');
-    }
+  const { error } = await useFetch('/api/send-mail', {
+    method: 'POST',
+    body: JSON.stringify(form.value),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
 
+  if (error.value) {
+    console.error('Email sending failed:', error);
+    submittedFormMsg.value =
+      'Något gick fel! Vänligen kontakta Avin Baker direkt på 072-1588250 eller avin@avabauto.se';
+    submittedFormError.value = true;
+  } else {
     submittedFormMsg.value = 'Tack för ditt meddelande!';
     submittedFormError.value = false;
     form.value.name = '';
     form.value.email = '';
     form.value.message = '';
-  } catch (error) {
-    console.error('Email sending failed:', error);
-    submittedFormMsg.value =
-      'Något gick fel! Vänligen kontakta Avin Baker direkt på 070-1234567 eller avin@avabauto.se';
-    submittedFormError.value = true;
   }
 }
-
-// const sendEmail = () => {
-//   const serviceId = config.public.emailjsServiceId as string;
-//   const templateId = config.public.emailjsTemplateId as string;
-//   const publicKey = config.public.emailjsPublicKey as string;
-
-//   emailjs
-//     .send(serviceId, templateId, form.value, publicKey)
-//     .then((response) => {
-//       console.info('SUCCESS!', response);
-//       form.value.name = '';
-//       form.value.email = '';
-//       form.value.message = '';
-//       submittedFormMsg.value = 'Tack för ditt meddelande!';
-//       submittedFormError.value = false;
-//     })
-//     .catch((error) => {
-//       console.error('Email sending failed:', error);
-//       submittedFormMsg.value =
-//         'Något gick fel! Vänligen kontakta Avin Baker direkt på 070-1234567 eller avin@avabauto.se';
-//       submittedFormError.value = true;
-//     });
-// };
 </script>
 
 <template>
@@ -80,7 +51,7 @@ async function sendEmail() {
       class="max-w-lg mx-auto p-8 bg-white rounded-lg shadow-lg"
     >
       <h2 class="text-2xl font-semibold mb-6 text-center text-gray-800">
-        Kontakta Oss
+        Kontakta AVAB Auto
       </h2>
       <p
         :class="{
@@ -127,12 +98,20 @@ async function sendEmail() {
           rows="5"
         />
       </div>
-      <button
-        type="submit"
-        class="w-full py-3 px-4 bg-blue-600 text-white rounded-md shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150 ease-in-out"
-      >
-        Skicka
-      </button>
+      <div class="flex flex-col gap-y-4">
+        <NuxtTurnstile
+          ref="turnstile"
+          :site-key="config.public.turnstile.siteKey"
+          v-model="token"
+        />
+        <button
+          :disabled="!token"
+          type="submit"
+          class="w-full disabled:bg-gray-300 disabled:cursor-not-allowed py-3 px-4 bg-blue-600 text-white rounded-md shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150 ease-in-out"
+        >
+          Skicka
+        </button>
+      </div>
     </form>
   </ClientOnly>
 </template>

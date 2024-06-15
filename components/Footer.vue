@@ -7,8 +7,8 @@
       class="flex gap-x-2 text-end items-center text-xs lg:flex-row lg:gap-x-12 lg:text-base lg:text-start"
     >
       <div class="text-start">
-        <p>avinbaker@avabauto.se</p>
-        <p>+4600000000</p>
+        <p>avin@avabauto.se</p>
+        <p>072-1588250</p>
       </div>
       <div>
         <p>AVAB AUTO AB</p>
