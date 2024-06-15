@@ -9,7 +9,7 @@ import ContactForm from '~/components/ContactForm.vue';
       class="hero flex justify-center h-screen items-center text-center text-white bg-gradient-to-b from-gray-800 to-white"
     >
       <div
-        class="bg-black bg-opacity-50 w-5/6 lg:w-1/2 p-5 rounded-lg flex flex-col gap-y-12"
+        class="bg-black bg-opacity-50 w-5/6 p-5 rounded-lg flex flex-col gap-y-12 lg:w-1/2 xl:w-1/3"
       >
         <div>
           <h1 class="text-4xl mb-4">Välkommen till AVAB AUTO!</h1>
