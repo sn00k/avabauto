@@ -12,12 +12,14 @@ const form = ref({
   name: '',
   email: '',
   message: '',
+  honeypot: '',
 });
 
 function resetForm() {
   form.value.name = '';
   form.value.email = '';
   form.value.message = '';
+  form.value.honeypot = '';
   turnstileRef.value.reset();
 }
 
@@ -33,6 +35,11 @@ async function sendEmail() {
   formSubmitting.value = true;
   disableSubmitButton.value = true;
   submittedFormError.value = false;
+
+  if (form.value.honeypot) {
+    handleError('Spam detected.');
+    return;
+  }
 
   if (!token.value) {
     handleError('Vänligen verifiera att du inte är en robot!');
@@ -140,6 +147,16 @@ async function sendEmail() {
           required
           class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50 focus:ring-blue-300 focus:border-blue-300"
           rows="5"
+        />
+      </div>
+      <!-- Honeypot field -->
+      <div v-show="false">
+        <input
+          type="text"
+          id="honeypot"
+          v-model="form.honeypot"
+          tabindex="-1"
+          autocomplete="off"
         />
       </div>
       <div class="flex flex-col gap-y-4">
