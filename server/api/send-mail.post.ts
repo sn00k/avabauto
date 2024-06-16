@@ -2,7 +2,6 @@ import { EmailParams, MailerSend, Recipient, Sender } from 'mailersend';
 import { useCompiler } from '#vue-email';
 
 const config = useRuntimeConfig();
-console.log('MailerSend API key:', config.mailerSendApiKey);
 
 const mailerSend = new MailerSend({
   apiKey: config.mailerSendApiKey,
