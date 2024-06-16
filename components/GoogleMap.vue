@@ -4,7 +4,7 @@ const mapKey = process.env.GOOGLE_MAPS_API_KEY;
 
 <template>
   <div class="flex justify-center my-10">
-    Google map goes here
+    Google-karta kommer snart...
     <!-- <iframe
       width="600"
       height="450"
