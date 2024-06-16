@@ -10,7 +10,6 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@emailjs/browser": "^4.3.3",
     "@nuxtjs/turnstile": "^0.8.0",
     "mailersend": "^2.2.0",
     "nuxt": "^3.12.1",
