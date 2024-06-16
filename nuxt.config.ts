@@ -19,8 +19,13 @@ export default defineNuxtConfig({
       isCustomElement: (tag) => ['ehtml'].includes(tag),
     },
   },
+  // Turnstile configuration
+  turnstile: {
+    addValidateEndpoint: true,
+  },
   runtimeConfig: {
     mailerSendApiKey: process.env.NUXT_MAILERSEND_API_KEY,
+    // Used by the generated /_turnstiles/validate endpoint
     turnstile: {
       secretKey: process.env.NUXT_TURNSTILE_SECRET_KEY,
     },
@@ -33,10 +38,6 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
   modules: ['@vue-email/nuxt', '@nuxtjs/turnstile'],
-  turnstile: {
-    siteKey: process.env.TURNSTILE_SITE_KEY,
-    addValidateEndpoint: true,
-  },
   postcss: {
     plugins: {
       tailwindcss: {},
