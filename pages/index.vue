@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import GoogleMap from '~/components/GoogleMap.vue';
 import ContactForm from '~/components/ContactForm.vue';
 </script>
 
@@ -39,9 +38,6 @@ import ContactForm from '~/components/ContactForm.vue';
           </div>
         </div>
       </div>
-    </section>
-    <section class="bg-gray-50 py-12">
-      <GoogleMap />
     </section>
     <section class="bg-gray-100 py-12">
       <ContactForm />
