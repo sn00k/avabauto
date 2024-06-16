@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-const config = useRuntimeConfig();
-const turnstile = ref();
+const turnstileRef = ref();
 const token = ref('');
+const formSubmitting = ref(false);
+const disableSubmitButton = ref(false);
+const submittedFormMsg = ref('');
+const submittedFormError = ref(false);
 
 const form = ref({
   name: '',
@@ -11,35 +14,76 @@ const form = ref({
   message: '',
 });
 
-const submittedFormMsg = ref('');
-const submittedFormError = ref(false);
+function resetForm() {
+  form.value.name = '';
+  form.value.email = '';
+  form.value.message = '';
+  turnstileRef.value.reset();
+}
+
+function handleError(msg: string) {
+  submittedFormMsg.value = msg;
+  submittedFormError.value = true;
+  formSubmitting.value = false;
+  disableSubmitButton.value = false;
+  turnstileRef.value.reset();
+}
 
 async function sendEmail() {
+  formSubmitting.value = true;
+  disableSubmitButton.value = true;
+  submittedFormError.value = false;
+
   if (!token.value) {
-    submittedFormMsg.value = 'Vänligen verifiera att du inte är en robot!';
-    submittedFormError.value = true;
+    handleError('Vänligen verifiera att du inte är en robot!');
     return;
   }
 
-  const { error } = await useFetch('/api/send-mail', {
-    method: 'POST',
-    body: JSON.stringify(form.value),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  try {
+    const { data: validationData, error: validationError } = await useFetch(
+      '/_turnstile/validate',
+      {
+        method: 'POST',
+        body: JSON.stringify({ token: token.value }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
 
-  if (error.value) {
-    console.error('Email sending failed:', error);
-    submittedFormMsg.value =
-      'Något gick fel! Vänligen kontakta Avin Baker direkt på 072-1588250 eller avin@avabauto.se';
-    submittedFormError.value = true;
-  } else {
-    submittedFormMsg.value = 'Tack för ditt meddelande!';
-    submittedFormError.value = false;
-    form.value.name = '';
-    form.value.email = '';
-    form.value.message = '';
+    if (validationError.value || !validationData.value?.success) {
+      handleError(
+        'Ogiltig verifiering! Vänligen kontakta Avin Baker direkt på 072-1588250 eller avin@avabauto.se',
+      );
+      return;
+    }
+
+    const { error: emailError } = await useFetch('/api/send-mail', {
+      method: 'POST',
+      body: JSON.stringify(form.value),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (emailError.value) {
+      console.error('Email sending failed:', emailError);
+      handleError(
+        'Något gick fel! Vänligen försök igen senare, eller kontakta Avin Baker direkt på 072-1588250 eller avin@avabauto.se',
+      );
+    } else {
+      submittedFormMsg.value = 'Tack för ditt meddelande!';
+      submittedFormError.value = false;
+      resetForm();
+    }
+  } catch (err) {
+    console.error('An unexpected error occurred:', err);
+    handleError(
+      'Något gick fel! Vänligen försök igen senare, eller kontakta Avin Baker direkt på 072-1588250 eller avin@avabauto.se',
+    );
+  } finally {
+    formSubmitting.value = false;
+    disableSubmitButton.value = false;
   }
 }
 </script>
@@ -100,18 +144,43 @@ async function sendEmail() {
       </div>
       <div class="flex flex-col gap-y-4">
         <NuxtTurnstile
-          ref="turnstile"
-          :site-key="config.public.turnstile.siteKey"
+          ref="turnstileRef"
           v-model="token"
+          :options="{ theme: 'light' }"
         />
         <button
-          :disabled="!token"
+          :disabled="!token || formSubmitting || disableSubmitButton"
           type="submit"
           class="w-full disabled:bg-gray-300 disabled:cursor-not-allowed py-3 px-4 bg-blue-600 text-white rounded-md shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150 ease-in-out"
         >
-          Skicka
+          <span v-if="formSubmitting" class="flex items-center justify-center">
+            <span class="material-symbols-outlined spin-icon text-2xl mr-2">
+              sync
+            </span>
+            Skickar...
+          </span>
+          <span v-else>
+            {{ token ? 'Skicka' : 'Vänligen verifiera dig som människa...' }}
+          </span>
         </button>
       </div>
     </form>
   </ClientOnly>
 </template>
+
+<style scoped>
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spin-icon {
+  display: inline-block;
+  animation: spin 1s linear infinite;
+  line-height: 1;
+}
+</style>
