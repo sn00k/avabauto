@@ -2,16 +2,18 @@ import { EmailParams, MailerSend, Recipient, Sender } from 'mailersend';
 import { useCompiler } from '#vue-email';
 
 const config = useRuntimeConfig();
+console.log('MailerSend API key:', config.mailerSendApiKey);
 
 const mailerSend = new MailerSend({
   apiKey: config.mailerSendApiKey,
 });
 
 const sentFrom = new Sender(
-  // 'kontakt@avabauto.se',
+  // 'info@avabauto.se',
   'avab.auto.kontakt@trial-0r83ql3o8zmlzw1j.mlsender.net',
-  'AVAB Auto kontaktformulär',
+  'avabauto.se kontaktformulär',
 );
+// const recipients = [new Recipient('avin@avabauto.se', 'Avin Baker')];
 const recipients = [new Recipient('robin@robins.nu', 'Robin Nilsson')];
 
 export default defineEventHandler(async (event) => {
